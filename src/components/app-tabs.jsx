@@ -12,10 +12,12 @@ export default function AppTabs() {
       backgroundColor={colors.background}
       indicatorColor={colors.backgroundElement}
       labelStyle={{ selected: { color: colors.text } }}>
-      <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
+      <NativeTabs.Trigger name="masa">
+        <NativeTabs.Trigger.Label>Masa</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/home.png')}
+          sf="scalemass"
+          md="scale"
+          src={require('@/assets/images/tabIcons/scale.png')}
           renderingMode="template"
         />
       </NativeTabs.Trigger>
@@ -23,7 +25,9 @@ export default function AppTabs() {
       <NativeTabs.Trigger name="distancia">
         <NativeTabs.Trigger.Label>Distancia</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/explore.png')}
+          sf="ruler"
+          md="straighten"
+          src={require('@/assets/images/tabIcons/ruler.png')}
           renderingMode="template"
         />
       </NativeTabs.Trigger>

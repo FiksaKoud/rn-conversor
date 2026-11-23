@@ -131,6 +131,10 @@ export const estilos = StyleSheet.create({
     borderRadius: 20,
     padding: 18,
     gap: 8,
+    maxHeight: '80%',
+    width: '100%',
+    maxWidth: 400,
+    alignSelf: 'center',
   },
   tituloModal: {
     fontSize: 16,

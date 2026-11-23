@@ -1,19 +1,21 @@
-import { useState } from 'react';
-import {
-  Modal, Pressable, ScrollView, Text, TextInput, View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { useTheme } from '@/hooks/use-theme';
 import { estilos } from '@/styles/distancia';
+import { useState } from 'react';
+import { Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-// Medidas de longitud solicitadas y su factor de conversión a metros
+// Medidas de distancia y su factor de conversión a metros
 const UNIDADES = [
+  { nombre: 'Milímetro', simbolo: 'mm', factor: 0.001, descripcion: '0,001 m' },
+  { nombre: 'Centímetro', simbolo: 'cm', factor: 0.01, descripcion: '0,01 m' },
   { nombre: 'Pulgada (inch)', simbolo: 'in', factor: 0.0254, descripcion: 'Aprox. 2,54 cm' },
-  { nombre: 'Pie (foot)', simbolo: 'ft', factor: 0.3048, descripcion: '12 pulgadas' },
-  { nombre: 'Yarda (yard)', simbolo: 'yd', factor: 0.9144, descripcion: '3 pies' },
-  { nombre: 'Milla (mile)', simbolo: 'mi', factor: 1609.344, descripcion: '5280 pies' },
-]
+  { nombre: 'Pie (foot)', simbolo: 'ft', factor: 0.3048, descripcion: '12 pulgadas (~30,48 cm)' },
+  { nombre: 'Yarda (yard)', simbolo: 'yd', factor: 0.9144, descripcion: '3 pies (~91,44 cm)' },
+  { nombre: 'Metro', simbolo: 'm', factor: 1, descripcion: 'Unidad base SI' },
+  { nombre: 'Kilómetro', simbolo: 'km', factor: 1000, descripcion: '1.000 m' },
+  { nombre: 'Milla (mile)', simbolo: 'mi', factor: 1609.344, descripcion: '5.280 pies (~1,61 km)' },
+  { nombre: 'Milla náutica', simbolo: 'nmi', factor: 1852, descripcion: '1.852 m' },
+];
 
 //type Unidad = (typeof UNIDADES)[number];
 
@@ -53,9 +55,9 @@ export default function PantallaDistancia() {
         {/* Cabecera */}
         <View style={estilos.cabecera}>
           <Text style={estilos.antetitulo}>CONVERSOR</Text>
-          <Text style={[estilos.titulo, { color: tema.text }]}>Longitud</Text>
+          <Text style={[estilos.titulo, { color: tema.text }]}>Distancia</Text>
           <Text style={[estilos.subtitulo, { color: tema.textSecondary }]}>
-            Pulgadas, pies, yardas y millas
+            Métricas, imperiales y náuticas
           </Text>
         </View>
 
@@ -127,32 +129,34 @@ export default function PantallaDistancia() {
       {/* Selector de unidad modal */}
       <Modal animationType="fade" onRequestClose={() => setSeleccionando(null)} transparent visible={seleccionando !== null}>
         <Pressable onPress={() => setSeleccionando(null)} style={estilos.fondoModal}>
-          <View style={[estilos.cajaModal, { backgroundColor: tema.background }]}>
+          <Pressable onPress={(e) => e.stopPropagation()} style={[estilos.cajaModal, { backgroundColor: tema.background }]}>
             <Text style={[estilos.tituloModal, { color: tema.text }]}>
               {seleccionando === 'origen' ? 'Convertir desde:' : 'Convertir a:'}
             </Text>
 
-            {UNIDADES.map((unidad) => {
-              const estaSeleccionada = (seleccionando === 'origen' ? origen.simbolo : destino.simbolo) === unidad.simbolo;
-              return (
-                <Pressable
-                  key={unidad.simbolo}
-                  onPress={() => seleccionarUnidad(unidad)}
-                  style={[
-                    estilos.opcion,
-                    { backgroundColor: estaSeleccionada ? tema.backgroundSelected : 'transparent' },
-                  ]}>
-                  <View>
-                    <Text style={[estilos.nombreOpcion, { color: tema.text }]}>{unidad.nombre}</Text>
-                    <Text style={[estilos.descOpcion, { color: tema.textSecondary }]}>
-                      {unidad.simbolo} · {unidad.descripcion}
-                    </Text>
-                  </View>
-                  {estaSeleccionada && <Text style={estilos.tilde}>✓</Text>}
-                </Pressable>
-              );
-            })}
-          </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {UNIDADES.map((unidad) => {
+                const estaSeleccionada = (seleccionando === 'origen' ? origen.simbolo : destino.simbolo) === unidad.simbolo;
+                return (
+                  <Pressable
+                    key={unidad.simbolo}
+                    onPress={() => seleccionarUnidad(unidad)}
+                    style={[
+                      estilos.opcion,
+                      { backgroundColor: estaSeleccionada ? tema.backgroundSelected : 'transparent' },
+                    ]}>
+                    <View>
+                      <Text style={[estilos.nombreOpcion, { color: tema.text }]}>{unidad.nombre}</Text>
+                      <Text style={[estilos.descOpcion, { color: tema.textSecondary }]}>
+                        {unidad.simbolo} · {unidad.descripcion}
+                      </Text>
+                    </View>
+                    {estaSeleccionada && <Text style={estilos.tilde}>✓</Text>}
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          </Pressable>
         </Pressable>
       </Modal>
     </SafeAreaView>

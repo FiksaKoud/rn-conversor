@@ -19,11 +19,11 @@ export default function AppTabs() {
       <TabSlot style={{ height: '100%' }} />
       <TabList asChild>
         <CustomTabList>
-          <TabTrigger name="home" href="/" asChild>
-            <TabButton>Home</TabButton>
+          <TabTrigger name="masa" href="/masa" asChild>
+            <TabButton sf="scalemass" web="scale">Masa</TabButton>
           </TabTrigger>
-          <TabTrigger name="explore" href="/explore" asChild>
-            <TabButton>Explore</TabButton>
+          <TabTrigger name="distancia" href="/distancia" asChild>
+            <TabButton sf="ruler" web="straighten">Distancia</TabButton>
           </TabTrigger>
         </CustomTabList>
       </TabList>
@@ -31,12 +31,23 @@ export default function AppTabs() {
   );
 }
 
-export function TabButton({ children, isFocused, ...props }) {
+export function TabButton({ children, isFocused, sf, web, ...props }) {
+  const scheme = useColorScheme();
+  const colors = Colors[scheme === 'dark' ? 'dark' : 'light'];
+  const iconColor = isFocused ? colors.text : colors.textSecondary;
+
   return (
     <Pressable {...props} style={({ pressed }) => pressed && styles.pressed}>
       <ThemedView
         type={isFocused ? 'backgroundSelected' : 'backgroundElement'}
         style={styles.tabButtonView}>
+        {sf && (
+          <SymbolView
+            name={{ ios: sf, web: web || sf }}
+            tintColor={iconColor}
+            size={16}
+          />
+        )}
         <ThemedText type="small" themeColor={isFocused ? 'text' : 'textSecondary'}>
           {children}
         </ThemedText>
@@ -53,7 +64,7 @@ export function CustomTabList(props) {
     <View {...props} style={styles.tabListContainer}>
       <ThemedView type="backgroundElement" style={styles.innerContainer}>
         <ThemedText type="smallBold" style={styles.brandText}>
-          Expo Starter
+          Conversor
         </ThemedText>
 
         {props.children}
@@ -99,6 +110,9 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   tabButtonView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.one,
     paddingVertical: Spacing.one,
     paddingHorizontal: Spacing.three,
     borderRadius: Spacing.three,
